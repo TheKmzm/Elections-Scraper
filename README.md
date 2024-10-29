@@ -31,13 +31,13 @@ pip install requests beautifulsoup4 pandas
 
 # Usage
 
-    Run the Script:
+1. Run the Script:
 
-    bash
 
-python project_3.py
 
-Arguments:
+     python project_3.py
+
+2. Arguments
 
     URL: URL of the voting results page for the municipality.
     Output CSV file: Name of the CSV file to save the data.
