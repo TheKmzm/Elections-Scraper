@@ -31,11 +31,13 @@ pip install requests beautifulsoup4 pandas
 
 # Usage
 
-1. Run the Script:
+1. Run the Scrip
 
 
+bash
 
-     python project_3.py
+
+    python project_3.py
 
 2. Arguments
 
