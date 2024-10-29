@@ -45,7 +45,7 @@ Example:
     python project_3.py "https://www.volby.cz/..." "results.csv"
 
 The output will be saved in the specified CSV file.
-#Author
+# Author
 
 - Jakub Macíček
 - Email: macicekjakub@gmail.com
