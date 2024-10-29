@@ -33,10 +33,6 @@ pip install requests beautifulsoup4 pandas
 
 1. Run the Scrip
 
-
-bash
-
-
     python project_3.py
 
 2. Arguments
@@ -46,14 +42,12 @@ bash
 
 Example:
 
-bash
-
     python project_3.py "https://www.volby.cz/..." "results.csv"
 
 The output will be saved in the specified CSV file.
-Author
+#Author
 
-    Jakub Macíček
-    Email: macicekjakub@gmail.com
+- Jakub Macíček
+- Email: macicekjakub@gmail.com
 
 For more details or assistance, feel free to reach out to the author.
