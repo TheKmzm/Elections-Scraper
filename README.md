@@ -2,11 +2,12 @@
 # Voting Data Extraction Tool
 
 A Python script for scraping voting results from the volby.cz website. The program downloads data from a specified URL, processes the election results for each municipality, and saves the results to a CSV file.
-Features
 
-- Scrapes voting data for individual municipalities
-- Aggregates and formats data in a structured CSV format
-- Handles navigation through multiple pages of results.
+Features:
+
+ - Scrapes voting data for individual municipalities
+ - Aggregates and formats data in a structured CSV format
+ - Handles navigation through multiple pages of results.
 
 # Installation
 ## Prerequisites
