@@ -11,7 +11,9 @@ Features
 # Installation
 ## Prerequisites
 
-    Python 3.6+: Ensure Python is installed on your system. You can download it from python.org.
+Python 3.6+: Ensure Python is installed on your system. 
+
+You can download it from python.org.
 
 ## Dependencies
 
