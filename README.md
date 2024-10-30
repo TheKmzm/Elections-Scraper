@@ -42,6 +42,7 @@ pip install requests beautifulsoup4 pandas
    
     Output CSV file: Name of the CSV file to save the data.
 
+The output will be saved in the specified CSV file.
 # Example:
 
     python project_3.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=12&xnumnuts=7101" "results.csv"
@@ -55,7 +56,7 @@ results.csv:
     525227,Bílá Voda,140,242,138,17,1,0,7,1,5,14,6,2,0,0,0,13,0,9,18,1,0,16,0,0,...
 
 
-The output will be saved in the specified CSV file.
+
 # Author
 
 - Jakub Macíček
