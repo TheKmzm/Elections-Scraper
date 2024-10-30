@@ -38,6 +38,8 @@ pip install requests beautifulsoup4 pandas
 2. Arguments
 
     URL: URL of the voting results page for the municipality.
+
+   
     Output CSV file: Name of the CSV file to save the data.
 
 Example:
