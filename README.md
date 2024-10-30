@@ -9,11 +9,11 @@ Features
 - Handles navigation through multiple pages of results.
 
 # Installation
-Prerequisites
+## Prerequisites
 
     Python 3.6+: Ensure Python is installed on your system. You can download it from python.org.
 
-Dependencies
+## Dependencies
 
 The script requires the following Python libraries:
 
@@ -21,7 +21,7 @@ The script requires the following Python libraries:
     BeautifulSoup4: For parsing HTML data.
     pandas: For data manipulation and saving to CSV.
 
-Installation of Libraries
+### Installation of Libraries
 
 To install the libraries listed in a requirements.txt file using Python, follow these steps:
 
@@ -37,11 +37,11 @@ This command will read the file and install all the specified packages and their
 
 # Usage
 
-1. Run the Scrip
+### 1.Run the Scrip
 
     python project_3.py
 
-2. Arguments
+### 2. Arguments
 
     URL: URL of the voting results page for the municipality.
 
