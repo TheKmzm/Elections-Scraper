@@ -23,11 +23,17 @@ The script requires the following Python libraries:
 
 Installation of Libraries
 
-Install the required libraries using pip:
+To install the libraries listed in a requirements.txt file using Python, follow these steps:
 
-bash
+1.Open a terminal or command prompt.
 
-pip install requests beautifulsoup4 pandas
+2.Navigate to the directory where your requirements.txt file is located.
+
+3.Run the following command:
+
+    pip install -r requirements.txt
+
+This command will read the file and install all the specified packages and their dependencies. Make sure you have Python and pip installed beforehand.
 
 # Usage
 
