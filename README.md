@@ -49,10 +49,10 @@ pip install requests beautifulsoup4 pandas
 
 results.csv:
 
-Název obce,Voliči v seznamu,Vydané obálky,Platné hlasy,Kód obce,Občanská demokratická strana,Řád národa - Vlastenecká unie,CESTA ODPOVĚDNÉ SPOLEČNOSTI,Česká str.sociálně demokrat.,Radostné Česko,STAROSTOVÉ A NEZÁVISLÍ,Komunistická str.Čech a Moravy,Strana zelených,"ROZUMNÍ-stop migraci,diktát.EU",Strana svobodných občanů,Blok proti islam.-Obran.domova,Občanská demokratická aliance,Česká pirátská strana,Referendum o Evropské unii,TOP 09,ANO 2011,Dobrá volba 2016,SPR-Republ.str.Čsl. M.Sládka,Křesť.demokr.unie-Čs.str.lid.,Česká strana národně sociální,REALISTÉ,SPORTOVCI,Dělnic.str.sociální spravedl.,Svob.a př.dem.-T.Okamura (SPD),Strana Práv Občanů
-523917,Bělá pod Pradědem,945,1546,938,77,1,0,47,2,53,70,8,12,10,0,1,79,1,33,331,0,3,42,0,7,0,1,158,2
-524891,Bernartice,344,703,343,24,0,0,25,1,6,38,1,1,1,0,0,15,0,5,149,2,1,13,1,0,1,1,58,0
-525227,Bílá Voda,140,242,138,17,1,0,7,1,5,14,6,2,0,0,0,13,0,9,18,1,0,16,0,0,1,1,25,1
+Název obce,Voliči v seznamu,Vydané obálky,Platné hlasy,Kód obce,Občanská demokratická strana,Řád národa - Vlastenecká unie...
+523917,Bělá pod Pradědem,945,1546,938,77,1,0,47,2,53,70,8,12,10,0,1,79,1,33...
+524891,Bernartice,344,703,343,24,0,0,25,1,6,38,1,1,1,0,0,15,0,5,149,2,1,13...
+525227,Bílá Voda,140,242,138,17,1,0,7,1,5,14,6,2,0,0,0,13,0,9,18,1,0,16,0,0,...
 
 
 The output will be saved in the specified CSV file.
