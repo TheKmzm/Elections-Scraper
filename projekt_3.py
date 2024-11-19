@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup  # Library for parsing HTML code
 import pandas as pd  # Library for working with data and saving to CSV
 import sys  # Library for exiting the program on error
 
-# Function for parsing command-line arguments
 def parse_arguments():
     """
     This function processes the arguments passed to the script from the command line.
@@ -43,7 +42,6 @@ def parse_arguments():
 
     return args  # Return the parsed arguments
 
-# Function for downloading the HTML content of a page
 def download_page(url):
     """
     This function takes a URL, downloads the page content using requests,
@@ -61,7 +59,69 @@ def download_page(url):
     soup = BeautifulSoup(response.text, 'html.parser')
     return soup
 
-# Function for extracting data from the results table
+def If_not_the_final(table_links):
+    """
+    This function checks if the current page is not the final one. If not,
+    it extracts additional voting data from a third-level page.
+    """
+    votes = [0] * 28  # Initialize a list to accumulate vote counts for 28 parties
+    for link2 in table_links:
+        link3 = link2['href']  # Link to third-level page
+        third_page = download_page("https://www.volby.cz/pls/ps2017nss/" + link3)
+        # Sum votes from the third-level page
+        votes = list(map(lambda a, b: a + b, votes, extract_votes(third_page, "third")))
+    return votes, third_page
+
+def data_append(votes, data):
+    """
+    Appends the extracted votes to the provided data list.
+    """
+    for v in votes:
+        data.append(v)  # Append each party's vote count
+    return data
+
+def find_links(second_page):
+    """
+    Finds the links to the detailed district results from the second-level page.
+    """
+    tables_links = second_page.find('table').find_all('tr')[1:]
+    table_links = tables_links[0].find_all('a')  # Links to each district
+    return table_links
+
+def extract_data(data, second_page):
+    """
+    Extracts data from the second-level page. If there's a link to a third-level page,
+    it will call `If_not_the_final()` to process that data as well.
+    """
+    # Check if there’s another page with further details
+    if not(is_final_page(second_page)):
+        table_links = find_links(second_page)
+        votes, third_page = If_not_the_final(table_links)
+        data = data_append(votes, data)
+        return data, third_page
+    else:
+        # If there’s no third-level page, extract votes from the second page
+        votes = extract_votes(second_page, "second")
+        data = data_append(votes, data)
+        return data, None
+
+def proces_rows(row):
+    """
+    Processes each row in the table, extracts municipality data, and follows links 
+    to extract additional data from subsequent pages.
+    """
+    data = []  # List to store data for the current row
+    # Get all columns from the row
+    columns = row.find_all('td')
+    code, name = extract_obec(columns)  # Get municipality code and name
+    if name == "-":
+        return data, None  # Stop if invalid name is encountered
+    data.append(code), data.append(name)  # Add municipality info to data list
+    link_to_second = columns[2].find('a')['href']  # Link to detailed results
+    second_page = download_page("https://www.volby.cz/pls/ps2017nss/" + link_to_second)
+    data, third_page = extract_data(data, second_page)
+    return data, third_page
+
 def extract_results(url):
     """
     This function takes the HTML content of a page, finds the table with election results,
@@ -78,49 +138,20 @@ def extract_results(url):
     if not tables:
         print("Error: Results table not found.")
         sys.exit(1)  # Exit the program if the table does not exist
-
-    # Process each table on the page (assuming the first few tables have needed data)
+    # Process each table on the page 
     for i in range(3):
-        
         table = tables[i]
         rows = table.find_all('tr')  # Get all rows in the table
         
         counter = 0  # To skip the first two rows if they are headers
         # Extract data for each table row
         for row in rows:
-            data = []  # List to store data for the current row
             if counter < 2:
                 counter += 1
                 continue  # Skip header rows
-            
-            # Get all columns from the row
-            columns = row.find_all('td')
-            code, name = extract_obec(columns)  # Get municipality code and name
-            if name == "-":
-                break  # Stop if invalid name is encountered
-            data.append(code), data.append(name)  # Add municipality info to data list
-            link_to_second = columns[2].find('a')['href']  # Link to detailed results
-            second_page = download_page("https://www.volby.cz/pls/ps2017nss/" + link_to_second)
-            votes = [0] * 28  # Initialize vote counts for parties
-            # Check if there’s another page with further details
-            if not(is_final_page(second_page)):
-                tables_links = second_page.find('table').find_all('tr')[1:]
-                table_links = tables_links[0].find_all('a')  # Links to each district
-                
-                for link2 in table_links:
-                    link3 = link2['href']  # Link to third-level page
-                    third_page = download_page("https://www.volby.cz/pls/ps2017nss/" + link3)
-                    # Sum votes from the third-level page
-                    votes = list(map(lambda a, b: a + b, votes, extract_votes(third_page, "third")))
-                for v in votes:
-                    data.append(v)  # Append each party's vote count
-                
-            else:
-                # If there’s no third-level page, extract votes from the second page
-                votes = extract_votes(second_page, "second")
-                for v in votes:
-                    data.append(v)
-                
+            data, third_page = proces_rows(row)
+            if data == []:
+                break
             data_to_file.append(data)  # Add all municipality data to final list
         # Create the header only once
         if not(is_header):
@@ -129,21 +160,27 @@ def extract_results(url):
             data_to_file.insert(0, header)  # Insert header at the top of data list
     return data_to_file  # Return the list of all extracted data
 
-# Function to check if a page is the final page in the data sequence
 def is_final_page(page):
+    """
+    Checks if the page is the final page in the election result sequence.
+    """
     identificator = page.find('table').find('tr').find('th').text.strip()
     if identificator == "Okrsek":
         return False  # Not the final page if it contains district info
     return True
 
-# Function to extract municipality code and name
 def extract_obec(columns):
+    """
+    Extracts the municipality code and name from the columns of the results table.
+    """
     obec_code = columns[0].text.strip()  # Municipality code
     obec_name = columns[1].text.strip()  # Municipality name
     return (obec_code, obec_name)
 
-# Function to process the final level of detail in results
 def final_page(second_page):
+    """
+    Processes the final-level pages (third-level) to extract vote data.
+    """
     tables_links = second_page.find('table').find_all('tr')[1:]
     table_links = tables_links[0].find_all('a')
     for link2 in table_links:
@@ -151,8 +188,10 @@ def final_page(second_page):
         third_page = download_page("https://www.volby.cz/pls/ps2017nss/" + link3)
         extract_votes(third_page, "third")
 
-# Function to create the header for the output file
 def headerf(page):
+    """
+    Creates the CSV header with municipality info and party names based on data from the third-level page.
+    """
     table = page.find_all('table')
     parties = []  # List to store party names
     header_start = ["Municipality Code", "Municipality Name", "Voters Listed", "Envelopes Issued", "Valid Votes"]
@@ -169,8 +208,10 @@ def headerf(page):
         parties.insert(0, header_start[i])
     return parties  # Return the header list
 
-# Function to extract vote counts from the page
 def extract_votes(page, number):
+    """
+    Extracts vote counts and other relevant voting data (e.g., voters listed, envelopes issued, valid votes).
+    """
     a = 0
     b = 2
     data = []  # List to store vote counts and summary data
@@ -193,7 +234,6 @@ def extract_votes(page, number):
     data.pop()  # Remove the last entry if not needed
     return data  # Return list of vote data
 
-# Function for saving data to CSV
 def save_to_csv(data, output_file):
     """
     This function accepts extracted data (a list of municipalities and their election results),
@@ -206,7 +246,6 @@ def save_to_csv(data, output_file):
     df.to_csv(output_file, index=False)  # Save the DataFrame to a CSV file
     print(f"Results successfully saved to {output_file}")  # Print confirmation of successful save
 
-# Main program function
 def main():
     """
     The main program function that controls the entire process:
@@ -223,6 +262,5 @@ def main():
     # Save the results to a CSV file
     save_to_csv(data, args[1])
 
-# Run the main program function
 if __name__ == "__main__":
     main()
