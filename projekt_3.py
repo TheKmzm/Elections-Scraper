@@ -28,7 +28,7 @@ def parse_arguments():
         arg1 = args[0]
         arg2 = args[1]
         # Verify that the URL starts with the correct link
-        if not("https://www.volby.cz" == arg1[:20]):
+        if not("https://www.volby.cz" == arg1[:len("https://www.volby.cz")]):
             print("Error: Enter a valid link to the volby.cz website")
             sys.exit(1)  # Exit the program if the URL is incorrect
         if not(".csv" == arg2[-4:]):
@@ -139,17 +139,20 @@ def extract_results(url):
         print("Error: Results table not found.")
         sys.exit(1)  # Exit the program if the table does not exist
     # Process each table on the page 
-    for i in range(3):
+    for i in range(len(tables)):
         table = tables[i]
         rows = table.find_all('tr')  # Get all rows in the table
         
         counter = 0  # To skip the first two rows if they are headers
         # Extract data for each table row
+        third_page = None
         for row in rows:
             if counter < 2:
                 counter += 1
                 continue  # Skip header rows
-            data, third_page = proces_rows(row)
+            data, third_pagereturn = proces_rows(row)
+            if third_pagereturn != None:  # Control if third page is not NoneType
+                third_page = third_pagereturn
             if data == []:
                 break
             data_to_file.append(data)  # Add all municipality data to final list
